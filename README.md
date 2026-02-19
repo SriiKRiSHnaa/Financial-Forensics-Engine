@@ -5,7 +5,7 @@ A state-of-the-art platform for detecting suspicious multi-hop transaction netwo
 ---
 
 ## 🔗 Live Demo
-- **URL**: 
+- **URL**: https://financial-forensics-engine-two.vercel.app
 
 ## 🛠️ Tech Stack
 - **Backend**: Python (FastAPI), NetworkX (Graph Algorithms), Pandas (Data Processing).
