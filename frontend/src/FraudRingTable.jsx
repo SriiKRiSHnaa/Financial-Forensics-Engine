@@ -34,7 +34,6 @@ const FraudRingTable = ({ rings, onSelectRing }) => {
                             <th className="px-8 py-4 font-bold uppercase tracking-widest text-center">Members</th>
                             <th className="px-8 py-4 font-bold uppercase tracking-widest">Risk Score</th>
                             <th className="px-8 py-4 font-bold uppercase tracking-widest">Target Accounts</th>
-                            <th className="px-8 py-4 font-bold uppercase tracking-widest text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
@@ -82,19 +81,16 @@ const FraudRingTable = ({ rings, onSelectRing }) => {
                                         {ring.member_accounts.join(', ')}
                                     </div>
                                 </td>
-                                <td className="px-8 py-5 text-right">
-                                    <button
-                                        className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-400/50 group-hover:bg-blue-400/10 transition-all"
-                                    >
-                                        <ChevronRight size={14} />
-                                    </button>
-                                </td>
+                                <div className="font-mono text-[10px] text-gray-500 truncate max-w-[200px] bg-white/5 px-2 py-1 rounded">
+                                    {ring.member_accounts.join(', ')}
+                                </div>
+                            </td>
                             </motion.tr>
                         ))}
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
+        </div >
     );
 };
 

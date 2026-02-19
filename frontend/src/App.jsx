@@ -195,13 +195,13 @@ function App() {
 
                                     <GraphView data={graphData} onNodeClick={setSelectedNode} />
 
-                                    <div className="absolute bottom-6 left-6 flex gap-3 z-20">
+                                    <div className="absolute top-6 left-6 flex gap-3 z-20">
                                         <button
                                             onClick={() => {
                                                 setGraphData(null);
                                                 setSelectedNode(null);
                                             }}
-                                            className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-red-500/10 hover:border-red-500/30 text-gray-400 hover:text-red-400 transition-all backdrop-blur-md"
+                                            className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-red-500/10 hover:border-red-500/30 text-gray-400 hover:text-red-400 transition-all backdrop-blur-md shadow-2xl"
                                         >
                                             Reset Analysis
                                         </button>
