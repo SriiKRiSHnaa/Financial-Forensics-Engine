@@ -13,7 +13,10 @@ app = FastAPI(title="Financial Forensics Engine API")
 # Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://financial-forensics-engine-two.vercel.app"
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
