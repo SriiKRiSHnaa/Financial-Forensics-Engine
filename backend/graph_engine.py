@@ -231,7 +231,7 @@ class SmurfingDetector:
                     smurfing_rings.append({
                         "member_accounts": members,
                         "pattern_type": "smurfing_fan_in",
-                        "risk_score": 80.0 + (count * 1.5) # Adjusted scoring
+                        "risk_score": min(80.0 + (count * 1.5), 100.0)
                     })
 
             # 2. Fan-out (Disperser) - Quick dispersion to many receivers
@@ -249,7 +249,7 @@ class SmurfingDetector:
                     smurfing_rings.append({
                         "member_accounts": members,
                         "pattern_type": "smurfing_fan_out",
-                        "risk_score": 80.0 + (count * 1.5) # Adjusted scoring
+                        "risk_score": min(80.0 + (count * 1.5), 100.0)
                     })
                     
         return smurfing_rings
@@ -327,7 +327,7 @@ class GraphEngine:
                     "ring_id": ring_id,
                     "member_accounts": cycle,
                     "pattern_type": "cycle",
-                    "risk_score": 90.0 + (len(cycle) * 0.5)
+                    "risk_score": min(90.0 + (len(cycle) * 0.5), 100.0)
                 })
                 reported_sets.append(cycle_set)
                 ring_counter += 1
@@ -350,7 +350,7 @@ class GraphEngine:
                     "ring_id": ring_id,
                     "member_accounts": chain,
                     "pattern_type": "shell_chain",
-                    "risk_score": 80.0 + (len(chain) * 2.0)
+                    "risk_score": min(80.0 + (len(chain) * 2.0), 100.0)
                 })
                 reported_sets.append(chain_set)
                 ring_counter += 1
