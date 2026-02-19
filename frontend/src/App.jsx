@@ -27,12 +27,17 @@ function App() {
             // Remove trailing slash if it exists to avoid double slashes in the final path
             apiBaseUrl = apiBaseUrl.replace(/\/$/, '');
 
+            console.log("Attempting upload to:", apiBaseUrl);
+
             const res = await axios.post(`${apiBaseUrl}/upload-transactions`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setGraphData(res.data);
         } catch (err) {
-            setError(err.response?.data?.detail || "Connection to engine failed");
+            console.error("Upload Error Details:", err);
+            const detail = err.response?.data?.detail;
+            const message = detail || (err.message === "Network Error" ? `Failed to reach backend at ${import.meta.env.VITE_API_URL || 'localhost'}` : err.message);
+            setError(message || "Connection to engine failed");
         } finally {
             setIsLoading(false);
         }
