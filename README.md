@@ -1,48 +1,52 @@
-<<<<<<< HEAD
 # Financial Forensics Engine — Money Muling Detection Platform
 
-A complete hackathon-ready platform for detecting suspicious multi-hop transaction networks and potential money muling activity.
+A complete platform for detecting suspicious multi-hop transaction networks and potential money muling activity using advanced graph algorithms.
 
 ## 🚀 Features
-- **Graph Analytics**: Powered by NetworkX (Degree Centrality, PageRank, Betweenness).
-- **Mule Risk Scoring**: Automated logic to rank nodes by suspicious behavior.
-- **Interactive Visualization**: Real-time graph rendering with Cytoscape.js.
-- **AI Risk Insights**: Simulated LLM explanations for detected anomalies.
-- **Dark Fintech UI**: High-performance dashboard built with React and Tailwind.
+- **Graph Analytics**: Specialized detectors for Cycles, Shell Chains, and Smurfing.
+- **Dynamic Risk Scoring**: Real-time heuristic scoring based on network topology and flow velocity.
+- **Interactive Visualization**: High-performance graph rendering with Cytoscape.js.
+- **Deduplication Engine**: Results are filtered to prioritize high-level patterns (Cycles) over sub-paths.
 
 ## 📁 Structure
-- `/backend`: Python FastAPI service.
-- `/frontend`: React + Vite application.
-- `/data`: Sample CSV transaction data.
+- `/backend`: Python FastAPI service implementing the `GraphEngine`.
+- `/frontend`: React + Vite dashboard.
+- `/data`: Sample CSV datasets for verification.
+
+## 🛠️ Algorithm Approach
+
+### 1. Cycle Detection (Circular Fund Routing)
+- **Logic**: Identifies closed loops of transactions where funds return to the origin or a close associate.
+- **Constraints**: Specifically targets directed cycles of length **3, 4, and 5**.
+- **Normalization**: Cycles are lexicographically rotated to ensure `[A, B, C]` and `[B, C, A]` are treated as a single entity.
+- **Complexity**: $O(V \cdot d^{k-1})$, where $V$ is the number of nodes, $d$ is the average degree, and $k=5$. The fixed depth limit ensures high performance even on large datasets.
+
+### 2. Layered Shell Network Detection
+- **Logic**: Detects multi-hop chains (length $\ge 4$) passing through "shell" accounts.
+- **Heuristic**: An intermediate node is flagged as a "shell" only if:
+    1. It has low transaction volume (2–4 total).
+    2. It exhibits **High Pass-through**: Incoming amount matches outgoing amount (within 20% tolerance).
+- **Complexity**: $O(V \cdot d^k)$ with $k=6$. The strong pruning by the shell heuristic (ignoring 95%+ of normal nodes) significantly reduces practical execution time.
+
+### 3. Smurfing Pattern Detection (Fan-in / Fan-out)
+- **Logic**: Identifies "Aggregators" (many-to-one) and "Dispersers" (one-to-many).
+- **Temporal Analysis**: Uses a **72-hour sliding window** to identify clusters of activity.
+- **Threshold**: Requires **5+ unique participants** within the window to trigger a flag.
+- **Complexity**: $O(V \cdot T \log T)$, where $T$ is the number of transactions per hub. This is dominated by the timestamp sorting required for the sliding window calculation.
+
+---
 
 ## 🛠️ Setup Instructions
 
 ### Backend
 1. Navigate to `backend/`
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Start the server:
-   ```bash
-   python main.py
-   ```
-   *Runs on http://localhost:8000*
+2. Install dependencies: `pip install -r requirements.txt`
+3. Start the server: `python main.py`
 
 ### Frontend
 1. Navigate to `frontend/`
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the dev server:
-   ```bash
-   npm run dev
-   ```
-   *Runs on http://localhost:3000*
+2. Install dependencies: `npm install`
+3. Start dev server: `npm run dev`
 
 ## 📊 Sample Data
-Use the provided `data/transactions.csv` to test the platform. Nodes with high betweenness and cascading flows will be flagged as **High Risk (Red)**.
-=======
-# Financial-Forensics-Engine
->>>>>>> 89493716bfe29ae12cd754bff4a778b63a9ec634
+Use the provided `data/money_muling_test_dataset.csv` to test the platform. The system will automatically detect the three archetypes described above and assign risk scores.
