@@ -81,15 +81,11 @@ const FraudRingTable = ({ rings, onSelectRing }) => {
                                         {ring.member_accounts.join(', ')}
                                     </div>
                                 </td>
-                                <div className="font-mono text-[10px] text-gray-500 truncate max-w-[200px] bg-white/5 px-2 py-1 rounded">
-                                    {ring.member_accounts.join(', ')}
-                                </div>
-                            </td>
                             </motion.tr>
                         ))}
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
         </div >
     );
 };
