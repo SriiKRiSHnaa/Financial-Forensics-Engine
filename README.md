@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Financial Forensics Engine — Money Muling Detection Platform
 
 A complete hackathon-ready platform for detecting suspicious multi-hop transaction networks and potential money muling activity.
@@ -42,3 +43,6 @@ A complete hackathon-ready platform for detecting suspicious multi-hop transacti
 
 ## 📊 Sample Data
 Use the provided `data/transactions.csv` to test the platform. Nodes with high betweenness and cascading flows will be flagged as **High Risk (Red)**.
+=======
+# Financial-Forensics-Engine
+>>>>>>> 89493716bfe29ae12cd754bff4a778b63a9ec634
