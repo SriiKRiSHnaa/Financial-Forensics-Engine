@@ -5,7 +5,7 @@ A state-of-the-art platform for detecting suspicious multi-hop transaction netwo
 ---
 
 ## 🔗 Live Demo
-- **URL**: [https://financial-forensics-demo.example.com](https://financial-forensics-demo.example.com) *(Placeholder for deployment)*
+- **URL**: 
 
 ## 🛠️ Tech Stack
 - **Backend**: Python (FastAPI), NetworkX (Graph Algorithms), Pandas (Data Processing).
@@ -81,7 +81,8 @@ npm run dev
 
 ## 👥 Team Members
 - **[Sri Krishna]** - Project Lead & Core Engine Architect
-- *(Add other team members here)*
+- **[Dara Dheeraj]** - Data Scientist & Algorithm Developer
+- **[Ajith Singh]** - Backend Developer & Database Manager
 
 ---
 *Built for Hackathons & Financial Security Research.*
