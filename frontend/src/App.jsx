@@ -23,7 +23,10 @@ function App() {
         formData.append('file', file);
 
         try {
-            const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            let apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            // Remove trailing slash if it exists to avoid double slashes in the final path
+            apiBaseUrl = apiBaseUrl.replace(/\/$/, '');
+
             const res = await axios.post(`${apiBaseUrl}/upload-transactions`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
