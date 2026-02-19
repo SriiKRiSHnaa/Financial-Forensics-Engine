@@ -71,56 +71,53 @@ function App() {
     };
 
     return (
-        <div className="flex h-screen w-full bg-dark-900 overflow-hidden font-sans text-gray-100">
-            {/* Sidebar Navigation - Only show when data is present */}
-            {graphData && (
-                <nav className="w-20 border-r border-dark-700 glass flex flex-col items-center py-8 gap-10 z-20">
-                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-                        <Shield size={24} />
-                    </div>
-                    <div className="flex flex-col gap-8 text-gray-500">
-                        <LayoutDashboard size={24} className="text-blue-500 cursor-pointer" />
-                        <Database size={24} className="hover:text-gray-300 cursor-pointer transition-colors" />
-                        <Filter size={24} className="hover:text-gray-300 cursor-pointer transition-colors" />
-                    </div>
-                    <div className="mt-auto">
-                        <div className="w-8 h-8 rounded-full bg-dark-600 border border-dark-500" />
-                    </div>
-                </nav>
-            )}
+        <div className="flex h-screen w-full bg-dark-900 overflow-hidden font-sans text-gray-100 relative">
+            {/* Global Background DotGrid */}
+            <div className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-1000">
+                <DotGrid
+                    dotSize={3}
+                    gap={16}
+                    baseColor="#12121e"
+                    activeColor="#3b82f6"
+                    proximity={180}
+                    shockRadius={350}
+                    shockStrength={8}
+                    resistance={900}
+                    returnDuration={1.8}
+                />
+            </div>
+
+            {/* Global Radial Glow Effect */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none z-0" />
+
+            {/* Global Floating Capsule Navbar */}
+            <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl h-14 bg-dark-800/40 backdrop-blur-xl border border-white/5 rounded-full flex items-center justify-between px-6 z-50 shadow-2xl">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => setGraphData(null)}>
+                    <Shield size={20} className="text-blue-500" />
+                    <span className="font-bold text-sm tracking-tight">Forensics Engine</span>
+                </div>
+                <div className="flex items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+                    <button
+                        onClick={() => setGraphData(null)}
+                        className={`hover:text-white transition-colors ${!graphData ? 'text-white' : ''}`}
+                    >
+                        Analyzer
+                    </button>
+                    {graphData && (
+                        <button
+                            onClick={handleDownloadJson}
+                            className="hover:text-blue-400 transition-colors flex items-center gap-2"
+                        >
+                            <Download size={12} /> Export JSON
+                        </button>
+                    )}
+                    <a href="#" className="hover:text-white transition-colors">Documentation</a>
+                </div>
+            </div>
 
             {/* Main Content Area */}
-            <main className="flex-1 flex flex-col relative overflow-hidden">
-                {/* Top Header - Only show when data is present */}
-                {graphData && (
-                    <header className="h-16 border-b border-dark-700 glass px-8 flex items-center justify-between z-10">
-                        <div className="flex items-center gap-4">
-                            <h1 className="text-lg font-bold">Financial Forensics Engine</h1>
-                            <span className="bg-dark-600 px-2 py-0.5 rounded text-[10px] text-gray-400 font-mono">v1.0.0-PRO</span>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            {graphData && (
-                                <button
-                                    onClick={handleDownloadJson}
-                                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-blue-600/20"
-                                >
-                                    <Download size={14} /> Download Analysis JSON
-                                </button>
-                            )}
-                            <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
-                                <input
-                                    placeholder="Search node ID..."
-                                    className="bg-dark-800 border border-dark-600 h-9 pl-9 pr-4 rounded-lg text-xs w-64 focus:outline-none focus:border-blue-500/50 transition-colors"
-                                />
-                            </div>
-                        </div>
-                    </header>
-                )}
-
-                {/* Viewport */}
-                <div className="flex-1 relative overflow-y-auto">
+            <main className="flex-1 flex flex-col relative overflow-hidden z-10 pt-24">
+                <div className="flex-1 relative overflow-y-auto custom-scrollbar">
                     <AnimatePresence mode="wait">
                         {!graphData ? (
                             <motion.div
@@ -128,25 +125,10 @@ function App() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="h-full w-full relative flex flex-col items-center justify-center p-8 bg-dark-900"
+                                className="h-full w-full relative flex flex-col items-center justify-center p-8"
                             >
-                                {/* Floating Capsule Navbar */}
-                                <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl h-14 bg-dark-800/40 backdrop-blur-xl border border-white/5 rounded-full flex items-center justify-between px-6 z-20 shadow-2xl">
-                                    <div className="flex items-center gap-2">
-                                        <Shield size={20} className="text-blue-500" />
-                                        <span className="font-bold text-sm tracking-tight">Forensics Engine</span>
-                                    </div>
-                                    <div className="flex items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-gray-400">
-                                        <a href="#" className="hover:text-white transition-colors">Analyzer</a>
-                                        <a href="#" className="hover:text-white transition-colors">Documentation</a>
-                                    </div>
-                                </div>
-
                                 {/* Hero Content */}
                                 <div className="relative z-10 flex flex-col items-center text-center max-w-3xl">
-                                    {/* Radial Glow Effect */}
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none z-[-1]" />
-
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -183,42 +165,27 @@ function App() {
                                         )}
                                     </motion.div>
                                 </div>
-
-                                {/* Background DotGrid - Tuned for deeper contrast */}
-                                <div className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-1000">
-                                    <DotGrid
-                                        dotSize={3}
-                                        gap={16}
-                                        baseColor="#12121e"
-                                        activeColor="#3b82f6"
-                                        proximity={180}
-                                        shockRadius={350}
-                                        shockStrength={8}
-                                        resistance={900}
-                                        returnDuration={1.8}
-                                    />
-                                </div>
                             </motion.div>
                         ) : (
                             <motion.div
                                 key="graph-view"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="h-full w-full flex flex-col"
+                                className="h-full w-full flex flex-col p-8"
                             >
-                                <div className="flex-1 relative min-h-[500px]">
+                                <div className="flex-1 relative min-h-[500px] rounded-3xl overflow-hidden border border-white/5 bg-dark-800/20 backdrop-blur-sm">
                                     {/* Analysis Progress HUD */}
                                     <motion.div
                                         initial={{ opacity: 0, y: -20 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="absolute top-6 right-6 glass px-6 py-4 rounded-xl z-10 hidden lg:block"
+                                        className="absolute top-6 right-6 border border-white/5 bg-dark-800/60 backdrop-blur-xl px-6 py-4 rounded-2xl z-20 hidden lg:block shadow-xl"
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="space-y-1">
                                                 <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Analyzed</div>
                                                 <div className="text-sm font-bold text-blue-400 font-mono">{graphData.summary.total_accounts_analyzed} ACCOUNTS</div>
                                             </div>
-                                            <div className="h-8 w-px bg-dark-600" />
+                                            <div className="h-8 w-px bg-white/10" />
                                             <div className="space-y-1">
                                                 <div className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Detected Rings</div>
                                                 <div className="text-sm font-bold text-red-500 font-mono">{graphData.summary.fraud_rings_detected} THREATS</div>
@@ -228,37 +195,37 @@ function App() {
 
                                     <GraphView data={graphData} onNodeClick={setSelectedNode} />
 
-                                    <div className="absolute top-6 left-6 flex gap-3 z-10">
+                                    <div className="absolute bottom-6 left-6 flex gap-3 z-20">
                                         <button
                                             onClick={() => {
                                                 setGraphData(null);
                                                 setSelectedNode(null);
                                             }}
-                                            className="glass px-4 py-2 rounded-lg text-xs font-bold text-gray-400 hover:text-white transition-all hover:bg-red-500/10 hover:border-red-500/50"
+                                            className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-red-500/10 hover:border-red-500/30 text-gray-400 hover:text-red-400 transition-all backdrop-blur-md"
                                         >
-                                            Reset System
+                                            Reset Analysis
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Fraud Summary Section */}
-                                <div className="p-8 bg-dark-900 border-t border-dark-700">
+                                <div className="mt-8">
                                     <div className="max-w-7xl mx-auto">
-                                        <div className="flex items-center justify-between mb-4">
+                                        <div className="flex items-center justify-between mb-6">
                                             <div>
-                                                <h2 className="text-xl font-bold flex items-center gap-2">
+                                                <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
                                                     Investigation Dashboard
                                                 </h2>
-                                                <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">Detailed Money Muling Analysis</p>
+                                                <p className="text-[10px] text-gray-500 uppercase font-bold tracking-[0.2em] mt-1 shrink-0">Money Muling Analysis Engine</p>
                                             </div>
                                             <div className="flex gap-4">
-                                                <div className="glass px-4 py-2 rounded-lg">
-                                                    <div className="text-[10px] text-gray-500 font-bold uppercase">Accuracy Score</div>
-                                                    <div className="text-sm font-mono text-emerald-400">98.4%</div>
+                                                <div className="border border-white/5 bg-dark-800/40 backdrop-blur-md px-5 py-2.5 rounded-2xl">
+                                                    <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Accuracy Score</div>
+                                                    <div className="text-sm font-mono font-bold text-emerald-400">98.4%</div>
                                                 </div>
-                                                <div className="glass px-4 py-2 rounded-lg">
-                                                    <div className="text-[10px] text-gray-500 font-bold uppercase">Runtime</div>
-                                                    <div className="text-sm font-mono text-blue-400">{graphData.summary.processing_time_seconds}s</div>
+                                                <div className="border border-white/5 bg-dark-800/40 backdrop-blur-md px-5 py-2.5 rounded-2xl">
+                                                    <div className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Engine Runtime</div>
+                                                    <div className="text-sm font-mono font-bold text-blue-400">{graphData.summary.processing_time_seconds}s</div>
                                                 </div>
                                             </div>
                                         </div>

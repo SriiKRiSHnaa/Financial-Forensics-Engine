@@ -117,16 +117,18 @@ const GraphView = ({ data, onNodeClick }) => {
             <div ref={containerRef} className="w-full h-full" />
 
             {/* Legend */}
-            <div className="absolute bottom-6 left-6 glass p-4 rounded-xl text-xs space-y-2 pointer-events-none">
-                <div className="font-bold mb-2 uppercase tracking-widest text-[10px] opacity-60">Risk Profile</div>
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" /> High Risk (70-100)
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" /> Medium Risk (30-69)
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-emerald-500" /> Low Risk (0-29)
+            <div className="absolute bottom-6 left-6 border border-white/10 bg-dark-800/60 backdrop-blur-xl p-5 rounded-2xl text-[10px] space-y-3 pointer-events-none shadow-2xl">
+                <div className="font-extrabold mb-1 uppercase tracking-[0.2em] text-gray-500">Risk Profile</div>
+                <div className="space-y-2">
+                    <div className="flex items-center gap-3 font-bold text-gray-300">
+                        <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]" /> High Risk (70-100)
+                    </div>
+                    <div className="flex items-center gap-3 font-bold text-gray-300">
+                        <div className="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)]" /> Medium Risk (30-69)
+                    </div>
+                    <div className="flex items-center gap-3 font-bold text-gray-300">
+                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" /> Low Risk (0-29)
+                    </div>
                 </div>
             </div>
         </div>
