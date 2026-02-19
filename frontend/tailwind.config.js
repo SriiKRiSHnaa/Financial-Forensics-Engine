@@ -8,8 +8,8 @@ export default {
         extend: {
             colors: {
                 dark: {
-                    900: '#0a0a0c',
-                    800: '#121216',
+                    900: '#06060e', // Deeper black as requested
+                    800: '#0d0d15',
                     700: '#1c1c24',
                     600: '#2a2a35',
                 },

@@ -7,6 +7,7 @@ import UploadPanel from './UploadPanel';
 import GraphView from './GraphView';
 import RiskDrawer from './RiskDrawer';
 import FraudRingTable from './FraudRingTable';
+import DotGrid from './DotGrid';
 import { Download, FileJson } from 'lucide-react';
 
 function App() {
@@ -62,72 +63,131 @@ function App() {
 
     return (
         <div className="flex h-screen w-full bg-dark-900 overflow-hidden font-sans text-gray-100">
-            {/* Sidebar Navigation */}
-            <nav className="w-20 border-r border-dark-700 glass flex flex-col items-center py-8 gap-10 z-20">
-                <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-                    <Shield size={24} />
-                </div>
-                <div className="flex flex-col gap-8 text-gray-500">
-                    <LayoutDashboard size={24} className="text-blue-500 cursor-pointer" />
-                    <Database size={24} className="hover:text-gray-300 cursor-pointer transition-colors" />
-                    <Filter size={24} className="hover:text-gray-300 cursor-pointer transition-colors" />
-                </div>
-                <div className="mt-auto">
-                    <div className="w-8 h-8 rounded-full bg-dark-600 border border-dark-500" />
-                </div>
-            </nav>
+            {/* Sidebar Navigation - Only show when data is present */}
+            {graphData && (
+                <nav className="w-20 border-r border-dark-700 glass flex flex-col items-center py-8 gap-10 z-20">
+                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                        <Shield size={24} />
+                    </div>
+                    <div className="flex flex-col gap-8 text-gray-500">
+                        <LayoutDashboard size={24} className="text-blue-500 cursor-pointer" />
+                        <Database size={24} className="hover:text-gray-300 cursor-pointer transition-colors" />
+                        <Filter size={24} className="hover:text-gray-300 cursor-pointer transition-colors" />
+                    </div>
+                    <div className="mt-auto">
+                        <div className="w-8 h-8 rounded-full bg-dark-600 border border-dark-500" />
+                    </div>
+                </nav>
+            )}
 
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col relative overflow-hidden">
-                {/* Top Header */}
-                <header className="h-16 border-b border-dark-700 glass px-8 flex items-center justify-between z-10">
-                    <div className="flex items-center gap-4">
-                        <h1 className="text-lg font-bold">Financial Forensics Engine</h1>
-                        <span className="bg-dark-600 px-2 py-0.5 rounded text-[10px] text-gray-400 font-mono">v1.0.0-PRO</span>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        {graphData && (
-                            <button
-                                onClick={handleDownloadJson}
-                                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-blue-600/20"
-                            >
-                                <Download size={14} /> Download Analysis JSON
-                            </button>
-                        )}
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
-                            <input
-                                placeholder="Search node ID..."
-                                className="bg-dark-800 border border-dark-600 h-9 pl-9 pr-4 rounded-lg text-xs w-64 focus:outline-none focus:border-blue-500/50 transition-colors"
-                            />
+                {/* Top Header - Only show when data is present */}
+                {graphData && (
+                    <header className="h-16 border-b border-dark-700 glass px-8 flex items-center justify-between z-10">
+                        <div className="flex items-center gap-4">
+                            <h1 className="text-lg font-bold">Financial Forensics Engine</h1>
+                            <span className="bg-dark-600 px-2 py-0.5 rounded text-[10px] text-gray-400 font-mono">v1.0.0-PRO</span>
                         </div>
-                    </div>
-                </header>
+
+                        <div className="flex items-center gap-4">
+                            {graphData && (
+                                <button
+                                    onClick={handleDownloadJson}
+                                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-lg shadow-blue-600/20"
+                                >
+                                    <Download size={14} /> Download Analysis JSON
+                                </button>
+                            )}
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={14} />
+                                <input
+                                    placeholder="Search node ID..."
+                                    className="bg-dark-800 border border-dark-600 h-9 pl-9 pr-4 rounded-lg text-xs w-64 focus:outline-none focus:border-blue-500/50 transition-colors"
+                                />
+                            </div>
+                        </div>
+                    </header>
+                )}
 
                 {/* Viewport */}
                 <div className="flex-1 relative overflow-y-auto">
                     <AnimatePresence mode="wait">
                         {!graphData ? (
                             <motion.div
-                                key="upload"
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 1.05 }}
-                                transition={{ duration: 0.4 }}
-                                className="h-full w-full flex items-center justify-center p-8 bg-gradient-to-b from-dark-900 to-dark-800"
+                                key="landing"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="h-full w-full relative flex flex-col items-center justify-center p-8 bg-dark-900"
                             >
-                                <div className="flex flex-col items-center">
-                                    <UploadPanel onUpload={handleUpload} isLoading={isLoading} />
-                                    {error && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="mt-6 text-red-400 text-xs font-mono bg-red-400/10 px-4 py-2 rounded-lg border border-red-400/20 uppercase tracking-widest"
-                                        >
-                                            {error}
-                                        </motion.div>
-                                    )}
+                                {/* Floating Capsule Navbar */}
+                                <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl h-14 bg-dark-800/40 backdrop-blur-xl border border-white/5 rounded-full flex items-center justify-between px-6 z-20 shadow-2xl">
+                                    <div className="flex items-center gap-2">
+                                        <Shield size={20} className="text-blue-500" />
+                                        <span className="font-bold text-sm tracking-tight">Forensics Engine</span>
+                                    </div>
+                                    <div className="flex items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+                                        <a href="#" className="hover:text-white transition-colors">Analyzer</a>
+                                        <a href="#" className="hover:text-white transition-colors">Documentation</a>
+                                    </div>
+                                </div>
+
+                                {/* Hero Content */}
+                                <div className="relative z-10 flex flex-col items-center text-center max-w-3xl">
+                                    {/* Radial Glow Effect */}
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none z-[-1]" />
+
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mb-6 px-4 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center gap-2"
+                                    >
+                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-blue-400">New AI Engine Active</span>
+                                    </motion.div>
+
+                                    <motion.h1
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 }}
+                                        className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[0.9] mb-8"
+                                    >
+                                        Organized chaos with <br />
+                                        <span className="text-blue-500">every transaction!</span>
+                                    </motion.h1>
+
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="w-full flex flex-col items-center gap-6"
+                                    >
+                                        <div className="w-full max-w-md">
+                                            <UploadPanel onUpload={handleUpload} isLoading={isLoading} />
+                                        </div>
+
+                                        {error && (
+                                            <div className="text-red-400 text-[10px] font-mono bg-red-400/10 px-4 py-2 rounded-full border border-red-400/20 uppercase tracking-widest">
+                                                {error}
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                </div>
+
+                                {/* Background DotGrid - Tuned for deeper contrast */}
+                                <div className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-1000">
+                                    <DotGrid
+                                        dotSize={3}
+                                        gap={16}
+                                        baseColor="#12121e"
+                                        activeColor="#3b82f6"
+                                        proximity={180}
+                                        shockRadius={350}
+                                        shockStrength={8}
+                                        resistance={900}
+                                        returnDuration={1.8}
+                                    />
                                 </div>
                             </motion.div>
                         ) : (

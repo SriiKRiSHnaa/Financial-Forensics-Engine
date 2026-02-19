@@ -11,50 +11,39 @@ const UploadPanel = ({ onUpload, isLoading }) => {
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass p-8 rounded-2xl flex flex-col items-center justify-center text-center max-w-md w-full"
+        <div
+            className="group relative"
         >
-            <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 text-blue-400">
-                <Upload size={32} />
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            <div className="relative glass p-8 rounded-2xl flex flex-col items-center justify-center text-center w-full">
+                <h2 className="text-xl font-bold mb-1">Start Analysis</h2>
+                <p className="text-gray-500 mb-6 text-xs uppercase tracking-widest font-bold">
+                    Drop transactions CSV
+                </p>
+
+                <label className="w-full">
+                    <div className={`
+              flex items-center justify-center gap-3 px-8 py-3 bg-white text-black rounded-full font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer
+              ${isLoading ? 'opacity-50 cursor-wait' : ''}
+            `}>
+                        <Upload size={18} />
+                        <span>{isLoading ? 'Processing...' : 'Get Started'}</span>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            accept=".csv"
+                            onChange={handleFileChange}
+                            disabled={isLoading}
+                        />
+                    </div>
+                </label>
+
+                <p className="mt-4 text-[10px] text-gray-600 font-mono tracking-tighter">
+                    Accepts standard financial dataset exports (.csv)
+                </p>
             </div>
-
-            <h2 className="text-2xl font-bold mb-2">Upload Transactions</h2>
-            <p className="text-gray-400 mb-8 text-sm">
-                Drag and drop your transaction CSV file here to begin the graph analysis.
-            </p>
-
-            <label className="w-full">
-                <div className={`
-          flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all
-          ${isLoading ? 'border-blue-500/50 cursor-wait' : 'border-dark-600 hover:border-blue-500/50 hover:bg-blue-500/5'}
-        `}>
-                    <FileCode className="text-gray-500 mb-2" size={24} />
-                    <span className="text-sm font-medium text-gray-300">
-                        {isLoading ? 'Processing algorithms...' : 'Choose CSV File'}
-                    </span>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="hidden"
-                        accept=".csv"
-                        onChange={handleFileChange}
-                        disabled={isLoading}
-                    />
-                </div>
-            </label>
-
-            <div className="mt-6 flex items-start gap-2 p-3 bg-yellow-500/5 border border-yellow-500/10 rounded-lg text-left">
-                <AlertCircle size={16} className="text-yellow-500 mt-0.5 shrink-0" />
-                <span className="text-[10px] text-yellow-500/80 leading-relaxed">
-                    Ensure your CSV has columns: <code className="bg-yellow-500/10 px-1 rounded text-white">sender_id</code>,
-                    <code className="bg-yellow-500/10 px-1 rounded text-white">receiver_id</code>,
-                    <code className="bg-yellow-500/10 px-1 rounded text-white">amount</code>,
-                    <code className="bg-yellow-500/10 px-1 rounded text-white">timestamp</code>.
-                </span>
-            </div>
-        </motion.div>
+        </div>
     );
 };
 
