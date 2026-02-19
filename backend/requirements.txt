@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+networkx
+pandas
+python-multipart
+pydantic
+python-dotenv
+scipy
