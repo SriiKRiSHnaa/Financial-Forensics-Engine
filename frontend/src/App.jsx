@@ -23,7 +23,8 @@ function App() {
         formData.append('file', file);
 
         try {
-            const res = await axios.post('http://localhost:8000/upload-transactions', formData, {
+            const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const res = await axios.post(`${apiBaseUrl}/upload-transactions`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setGraphData(res.data);

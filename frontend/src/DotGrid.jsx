@@ -1,11 +1,8 @@
 'use client';
 import { useRef, useEffect, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
-import { InertiaPlugin } from 'gsap/InertiaPlugin';
 
 import './DotGrid.css';
-
-gsap.registerPlugin(InertiaPlugin);
 
 const throttle = (func, limit) => {
     let lastCall = 0;
@@ -101,7 +98,7 @@ const DotGrid = ({
             for (let x = 0; x < cols; x++) {
                 const cx = startX + x * cell;
                 const cy = startY + y * cell;
-                dots.push({ cx, cy, xOffset: 0, yOffset: 0, _inertiaApplied: false });
+                dots.push({ cx, cy, xOffset: 0, yOffset: 0, isAnimating: false });
             }
         }
         dotsRef.current = dots;
@@ -197,21 +194,28 @@ const DotGrid = ({
 
             for (const dot of dotsRef.current) {
                 const dist = Math.hypot(dot.cx - pr.x, dot.cy - pr.y);
-                if (speed > speedTrigger && dist < proximity && !dot._inertiaApplied) {
-                    dot._inertiaApplied = true;
+                if (speed > speedTrigger && dist < proximity && !dot.isAnimating) {
+                    dot.isAnimating = true;
                     gsap.killTweensOf(dot);
-                    const pushX = dot.cx - pr.x + vx * 0.005;
-                    const pushY = dot.cy - pr.y + vy * 0.005;
+
+                    const pushX = (dot.cx - pr.x) * 0.1 + vx * 0.005;
+                    const pushY = (dot.cy - pr.y) * 0.1 + vy * 0.005;
+
                     gsap.to(dot, {
-                        inertia: { xOffset: pushX, yOffset: pushY, resistance },
+                        xOffset: pushX,
+                        yOffset: pushY,
+                        duration: 0.3,
+                        ease: 'power2.out',
                         onComplete: () => {
                             gsap.to(dot, {
                                 xOffset: 0,
                                 yOffset: 0,
                                 duration: returnDuration,
-                                ease: 'elastic.out(1,0.75)'
+                                ease: 'elastic.out(1, 0.75)',
+                                onComplete: () => {
+                                    dot.isAnimating = false;
+                                }
                             });
-                            dot._inertiaApplied = false;
                         }
                     });
                 }
@@ -225,22 +229,28 @@ const DotGrid = ({
             const cy = e.clientY - rect.top;
             for (const dot of dotsRef.current) {
                 const dist = Math.hypot(dot.cx - cx, dot.cy - cy);
-                if (dist < shockRadius && !dot._inertiaApplied) {
-                    dot._inertiaApplied = true;
+                if (dist < shockRadius && !dot.isAnimating) {
+                    dot.isAnimating = true;
                     gsap.killTweensOf(dot);
                     const falloff = Math.max(0, 1 - dist / shockRadius);
-                    const pushX = (dot.cx - cx) * shockStrength * falloff;
-                    const pushY = (dot.cy - cy) * shockStrength * falloff;
+                    const pushX = (dot.cx - cx) * (shockStrength / 2) * falloff;
+                    const pushY = (dot.cy - cy) * (shockStrength / 2) * falloff;
+
                     gsap.to(dot, {
-                        inertia: { xOffset: pushX, yOffset: pushY, resistance },
+                        xOffset: pushX,
+                        yOffset: pushY,
+                        duration: 0.4,
+                        ease: 'power3.out',
                         onComplete: () => {
                             gsap.to(dot, {
                                 xOffset: 0,
                                 yOffset: 0,
                                 duration: returnDuration,
-                                ease: 'elastic.out(1,0.75)'
+                                ease: 'elastic.out(1, 0.75)',
+                                onComplete: () => {
+                                    dot.isAnimating = false;
+                                }
                             });
-                            dot._inertiaApplied = false;
                         }
                     });
                 }
